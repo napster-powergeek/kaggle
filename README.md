@@ -2,7 +2,7 @@
 
 #### Work done on kaggle 
 
-
+##### Never replace by mean, Always replace by mode or median. for categorical use mode(text_based)
 
 #### check skewness
 from scipy.stats import skew  # for some statistics
