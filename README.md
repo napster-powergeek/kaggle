@@ -1,6 +1,6 @@
 # kaggle
-# check skewness
-# Work done on kaggle 
+#### check skewness
+#### Work done on kaggle 
 
 from scipy.stats import skew  # for some statistics
 from scipy.special import boxcox1p
