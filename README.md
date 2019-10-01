@@ -53,3 +53,4 @@ features['hasbsmt'] = features['TotalBsmtSF'].apply(lambda x: 1 if x > 0 else 0)
 features['hasfireplace'] = features['Fireplaces'].apply(lambda x: 1 if x > 0 else 0)
 
 https://www.kaggle.com/quentinmonmousseau/ml-workflow-lightgbm-0-37-randomforest-0-39
+https://www.kaggle.com/dgomonov/new-york-city-airbnb-open-data
