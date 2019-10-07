@@ -54,3 +54,6 @@ features['hasfireplace'] = features['Fireplaces'].apply(lambda x: 1 if x > 0 els
 
 https://www.kaggle.com/quentinmonmousseau/ml-workflow-lightgbm-0-37-randomforest-0-39
 https://www.kaggle.com/dgomonov/new-york-city-airbnb-open-data
+
+
+https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/page/25/#sub_values
