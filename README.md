@@ -57,3 +57,65 @@ https://www.kaggle.com/dgomonov/new-york-city-airbnb-open-data
 
 
 https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/page/25/#sub_values
+
+
+
+
+
+# specify your configurations as a dict
+params = {
+    'application': 'binary', # for binary classification
+#     'num_class' : 1, # used for multi-classes
+    'boosting': 'gbdt', # traditional gradient boosting decision tree
+    'num_iterations': 100, 
+    'learning_rate': 0.05,
+    'num_leaves': 62,
+    'device': 'cpu', # you can use GPU to achieve faster learning
+    'max_depth': -1, # <0 means no limit
+    'max_bin': 510, # Small number of bins may reduce training accuracy but can deal with over-fitting
+    'lambda_l1': 5, # L1 regularization
+    'lambda_l2': 10, # L2 regularization
+    'metric' : 'binary_error',
+    'subsample_for_bin': 200, # number of samples for constructing bins
+    'subsample': 1, # subsample ratio of the training instance
+    'colsample_bytree': 0.8, # subsample ratio of columns when constructing the tree
+    'min_split_gain': 0.5, # minimum loss reduction required to make further partition on a leaf node of the tree
+    'min_child_weight': 1, # minimum sum of instance weight (hessian) needed in a leaf
+    'min_child_samples': 5# minimum number of data needed in a leaf
+}
+# Initiate classifier to use
+mdl = lgb.LGBMClassifier(boosting_type= 'gbdt', 
+          objective = 'binary', 
+          n_jobs = 5, 
+          silent = True,
+          max_depth = params['max_depth'],
+          max_bin = params['max_bin'], 
+          subsample_for_bin = params['subsample_for_bin'],
+          subsample = params['subsample'], 
+          min_split_gain = params['min_split_gain'], 
+          min_child_weight = params['min_child_weight'], 
+          min_child_samples = params['min_child_samples'])
+
+mdl.get_params().keys()
+
+
+gridParams = {
+    'learning_rate': [0.005, 0.01],
+    'n_estimators': [8,16,24],
+    'num_leaves': [6,8,12,16], # large num_leaves helps improve accuracy but might lead to over-fitting
+    'boosting_type' : ['gbdt', 'dart'], # for better accuracy -> try dart
+    'objective' : ['binary'],
+    'max_bin':[255, 510], # large max_bin helps improve accuracy but might slow down training progress
+    'random_state' : [500],
+    'colsample_bytree' : [0.64, 0.65, 0.66],
+    'subsample' : [0.7,0.75],
+    'reg_alpha' : [1,1.2],
+    'reg_lambda' : [1,1.2,1.4],
+    }
+
+grid = GridSearchCV(mdl, gridParams, verbose=1, cv=4, n_jobs=-1)
+# Run the grid
+grid.fit(X_train_2, y_train_2)
+
+
+model = lgb.train(params, train_set=d_train_2, num_boost_round=1000, valid_sets=watchlist, early_stopping_rounds=30, verbose_eval=4)
