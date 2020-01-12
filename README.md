@@ -119,3 +119,25 @@ grid.fit(X_train_2, y_train_2)
 
 
 model = lgb.train(params, train_set=d_train_2, num_boost_round=1000, valid_sets=watchlist, early_stopping_rounds=30, verbose_eval=4)
+
+
+
+
+#################### GRIDSEARCHCV
+# specify parameters and distributions to sample from
+param_grid = {"max_depth": [6, 9, 12, None],
+              "max_features": ['sqrt', 'log2', None],
+              "min_samples_split": [2, 3, 10],
+              "bootstrap": [True, False],
+              "criterion": ["gini", "entropy"]}
+# Instantiate RanFor Clf
+ranforclf = RandomForestClassifier(n_estimators=120, n_jobs=-1, random_state=21)
+# run GridSearch
+grid_search = GridSearchCV(ranforclf, param_grid=param_grid, scoring = ['f1'], ##'roc_auc'], 
+                           cv = 5, n_jobs = -1, refit = 'f1', iid=False)
+start = time()
+grid_search.fit(X_tmp_scaled, y_tmp)
+
+print("GridSearchCV took %.2f seconds for %d candidate parameter settings."
+      % (time() - start, len(grid_search.cv_results_['params'])))
+report(grid_search.cv_results_, 'f1')
